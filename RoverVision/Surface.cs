@@ -73,7 +73,7 @@ namespace RoverVision
 
             surfaceShader.SetMatrix4("model", model);
             GL.BindVertexArray(surfaceVAO);
-            GL.DrawArrays(PrimitiveType.LineStripAdjacency, 0, surface.Length);
+            GL.DrawArrays(PrimitiveType.Lines, 0, surface.Length);
         }
 
         public void destroy(EventArgs e)

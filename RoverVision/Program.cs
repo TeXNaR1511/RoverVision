@@ -42,28 +42,7 @@ namespace RoverVision
         //список со всеми массивами с вершинами линий
         //private List<float[]> Lines = new List<float[]>() { line1, line2 };
         //список со всеми линиями - экземплярами класса Surface
-        private List<Surface> Surfaces = new List<Surface>()
-        { 
-            new Surface(
-                new float[]
-                {
-                    0f,0f,0f,
-                    0f,1f,0f,
-                    1f,1f,0f,
-                    1f,0f,0f,
-                },
-                new Vector3(0f,1f,0f)),
-            //new Surface(
-            //    new float[]
-            //    {
-            //        0f,0f,1f,
-            //        0f,1f,1f,
-            //        1f,1f,1f,
-            //        1f,0f,1f,
-            //    },
-            //    new Vector3(1f,0f,0f))
-            //
-        };
+        private List<Surface> Surfaces;
 
         private bool isForwardX = false;
         private bool isForwardY = false;
@@ -101,19 +80,199 @@ namespace RoverVision
             //_vertexBufferObject = GL.GenBuffer();
             //GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
             //GL.ClearColor(0.101f, 0.98f, 1.0f, 1.0f);
-            GL.ClearColor(0.188f, 0.462f, 0.470f, 1.0f);
+            GL.ClearColor(0.219f, 0.333f, 0.360f, 1.0f);
 
            
 
             //GL.ClearColor(0f, 0f, 1f,1f);
             //GL.Enable(EnableCap.DepthTest);
             //terrain = new Terrain(new FileInfo("./Resources/mshrpsc2.png"));//сама картинка
-            camera = new Camera(new Vector3(0, 0/*terrain.getHeightAtPosition(256, 256)*/, 0), Width / (float)Height);//положение камеры начальное
+            camera = new Camera(new Vector3(0, 2/*terrain.getHeightAtPosition(256, 256)*/, 0), Width / (float)Height);//положение камеры начальное
             //textFrame = new TextFrame();
             //car = new Car();
+            //задаём Surfaces
+            Surfaces = new List<Surface>()
+            {
+                //чтобы задать новую линию нужно дать массив вершин и цвет
+                //первая линия
+                new Surface(
+                    new float[]
+                    {
+                        0f,0.5f,0f,
+                        1f,1.4f,0f,
+
+                        1f,1.4f,0f,
+                        1.9f,0.4f,0f,
+
+                        1.9f,0.4f,0f,
+                        3.1f,1.5f,0f,
+
+                        3.1f,1.5f,0f,
+                        4.2f,3.1f,0f,
+                        
+                        4.2f,3.1f,0f,
+                        5f,2.4f,0f,
+                        
+                        5f,2.4f,0f,
+                        6.1f,1.9f,0f,
+                        
+                        6.1f,1.9f,0f,
+                        6.7f,1.2f,0f,
+                        
+                        6.7f,1.2f,0f,
+                        8f,0.7f,0f,
+                        
+                        8f,0.7f,0f,
+                        9.2f,1.3f,0f,
+
+                        9.2f,1.3f,0f,
+                        10.1f,2.1f,0f,
+                    },
+                    new Vector3(1f, 0.980f, 0.058f)),
+                //вторая линия
+                new Surface(
+                    new float[]
+                    {
+                        0f,0.3f,1f,
+                        0.9f,0f,1f,
+
+                        0.9f,0f,1f,
+                        2.4f,2f,1f,
+
+                        2.4f,2f,1f,
+                        3.5f,1.3f,1f,
+
+                        3.5f,1.3f,1f,
+                        3.8f,2.5f,1f,
+
+                        3.8f,2.5f,1f,
+                        5.1f,2.4f,1f,
+
+                        5.1f,2.4f,1f,
+                        5.7f,1.8f,1f,
+
+                        5.7f,1.8f,1f,
+                        6.5f,1.3f,1f,
+
+                        6.5f,1.3f,1f,
+                        8.1f,0.2f,1f,
+
+                        8.1f,0.2f,1f,
+                        9.4f,0.9f,1f,
+
+                        9.4f,0.9f,1f,
+                        10f,1.5f,1f,
+                    },
+                    new Vector3(0.058f, 0.203f, 1f)),
+                //третья линия
+                new Surface(
+                    new float[]
+                    {
+                        0f,0.7f,2f,
+                        0.7f,0.3f,2f,
+
+                        0.7f,0.3f,2f,
+                        2.2f,1f,2f,
+
+                        2.2f,1f,2f,
+                        3.3f,0.2f,2f,
+
+                        3.3f,0.2f,2f,
+                        4f,2.5f,2f,
+
+                        4f,2.5f,2f,
+                        5.7f,2.7f,2f,
+
+                        5.7f,2.7f,2f,
+                        6.3f,2.9f,2f,
+
+                        6.3f,2.9f,2f,
+                        7.2f,3.3f,2f,
+
+                        7.2f,3.3f,2f,
+                        8.4f,2.5f,2f,
+
+                        8.4f,2.5f,2f,
+                        9f,2.3f,2f,
+
+                        9f,2.3f,2f,
+                        10f,2.1f,2f,
+                    },
+                    new Vector3(1f, 0.211f, 0.058f)),
+                //четвертая линия
+                new Surface(
+                    new float[]
+                    {
+                        0f,0.1f,3f,
+                        0.5f,0.7f,3f,
+
+                        0.5f,0.7f,3f,
+                        1.4f,0.4f,3f,
+
+                        1.4f,0.4f,3f,
+                        2.9f,1.2f,3f,
+
+                        2.9f,1.2f,3f,
+                        4.3f,2.6f,3f,
+
+                        4.3f,2.6f,3f,
+                        5.1f,3.2f,3f,
+
+                        5.1f,3.2f,3f,
+                        6.2f,2.1f,3f,
+
+                        6.2f,2.1f,3f,
+                        6.9f,1.7f,3f,
+
+                        6.9f,1.7f,3f,
+                        8.3f,2.8f,3f,
+
+                        8.3f,2.8f,3f,
+                        8.8f,1.4f,3f,
+
+                        8.8f,1.4f,3f,
+                        10f,2.1f,3f,
+                    },
+                    new Vector3(0.066f, 1f, 0.058f)),
+                //пятая линия
+                new Surface(
+                    new float[]
+                    {
+                        0f,0.2f,4f,
+                        1.3f,0.5f,4f,
+
+                        1.3f,0.5f,4f,
+                        1.7f,1.2f,4f,
+
+                        1.7f,1.2f,4f,
+                        3.1f,1.5f,4f,
+
+                        3.1f,1.5f,4f,
+                        3.8f,2f,4f,
+
+                        3.8f,2f,4f,
+                        5.1f,2.2f,4f,
+
+                        5.1f,2.2f,4f,
+                        6.5f,2.8f,4f,
+
+                        6.5f,2.8f,4f,
+                        7.1f,2.5f,4f,
+
+                        7.1f,2.5f,4f,
+                        8f,3.1f,4f,
+
+                        8f,3.1f,4f,
+                        8.8f,2.4f,4f,
+
+                        8.8f,2.4f,4f,
+                        10f,1.5f,4f,
+                    },
+                    new Vector3(1f, 0.058f, 0.984f)),
+            };
 
             //загружаем все Surface внутри Surfaces
-            for(int i=0;i<Surfaces.Count;i++)
+            for (int i=0;i<Surfaces.Count;i++)
             {
                 Surfaces[i].load();
             }
@@ -208,7 +367,7 @@ namespace RoverVision
             //Console.WriteLine(maxX);
             //Console.WriteLine(maxY);
 
-            const float cameraSpeed = 1f;
+            const float cameraSpeed = 3f;
             const float sensitivity = 0.2f;
 
             const float carSpeed = 300f;
