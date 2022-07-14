@@ -18,55 +18,20 @@ namespace RoverVision
         public static Camera camera;
         private bool freeCamera = true;
 
-        private int _vertexBufferObject;
         private bool _firstMove = true;
         private Vector2 _lastPos;
-        //private bool textFramePaint = false;
-        //private Vector3 carPosition = new Vector3(0, 0, 0);
-        //private Vector3 textFramePosition = new Vector3(0, 0, 0);
 
-        //private Vector3 LWheelPosition = new Vector3(0, 0, 1);
-        //private Vector3 RWheelPosition = new Vector3(0, 0, 3);
-        //private int countKeyF = 0;
-        //здесь задаём все линии
-        //private static float[] line1 = new float[]
-        //{
-        //    0f,0f,0f,
-        //    0f,1f,0f,
-        //    1f,1f,0f,
-        //    1f,0f,0f,
-        //};
-        //private static float[] line2 = new float[]
-        //{
-        //    0f,0f,1f,
-        //    0f,1f,1f,
-        //    1f,1f,1f,
-        //    1f,0f,1f,
-        //};
-        //список со всеми массивами с вершинами линий
-        //private List<float[]> Lines = new List<float[]>() { line1, line2 };
+        //private float[] circle;
+        
         //список со всеми линиями - экземплярами класса Surface
         private List<Surface> Surfaces;
-        //private Surface WheelLeft;
-        //private Surface WheelRight;
-        //private float[] circle;
-
+        //линия движения ровера
         private float[] roverLine;
-
-        private bool isForwardX = false;
-        private bool isForwardY = false;
-
-        //StreamWriter sw = new StreamWriter("C:\\Users\\Xiaomi\\Text.txt");
-
-        //Terrain terrain;
-        //TextFrame textFrame;
-        //Car car;
         
         public Program()
-            : base(800, 600, GraphicsMode.Default, "MoonSurface")
+            : base(800, 600, GraphicsMode.Default, "Rover Vision")
         {
             WindowState = WindowState.Maximized;//формат окна
-            //Console.WriteLine(DisplayDevice.Default.Width+" "+DisplayDevice.Default.Height);
         }
 
         static void Main(string[] args)
@@ -75,29 +40,16 @@ namespace RoverVision
             {
                 program.Run();
             }
-
-            //Console.WriteLine()
-            //Console.WriteLine(MathHelper.RadiansToDegrees(Math.Acos(0.8)) + " " + MathHelper.RadiansToDegrees(Math.Acos(-0.5)));
         }
 
         protected override void OnLoad(EventArgs e)
         {
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Less);
-            //GL.Enable(EnableCap.DepthTest);
-            //GL.DepthFunc(DepthFunction.Less);
-            //_vertexBufferObject = GL.GenBuffer();
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-            //GL.ClearColor(0.101f, 0.98f, 1.0f, 1.0f);
+            //цвет фона
             GL.ClearColor(0.219f, 0.333f, 0.360f, 1.0f);
 
-
-            //GL.ClearColor(0f, 0f, 1f,1f);
-            //GL.Enable(EnableCap.DepthTest);
-            //terrain = new Terrain(new FileInfo("./Resources/mshrpsc2.png"));//сама картинка
-            camera = new Camera(new Vector3(0, 2/*terrain.getHeightAtPosition(256, 256)*/, 0), Width / (float)Height);//положение камеры начальное
-            //textFrame = new TextFrame();
-            //car = new Car();
+            camera = new Camera(new Vector3(0, 2, 0), Width / (float)Height);//положение камеры начальное
 
             roverLine = new float[]
                     {
@@ -316,6 +268,7 @@ namespace RoverVision
                     new Vector3(1f, 0.058f, 0.984f),
                     "Line"),
             };
+
             //задаём окружность
             //circle = new float[] {};
             //List<float> cir = new List<float>();
@@ -328,30 +281,12 @@ namespace RoverVision
             //    cir.Add(0f);
             //}
             //circle = cir.ToArray();
-            //
-            //WheelLeft = new Surface(
-            //    circle,
-            //    new Vector3(1f, 1f, 1f),
-            //    "Polygon");
-            //
-            //WheelRight = new Surface(
-            //    circle,
-            //    new Vector3(1f, 1f, 1f),
-            //    "Polygon");
-
-
+            
             //загружаем все Surface внутри Surfaces
             for (int i=0;i<Surfaces.Count;i++)
             {
                 Surfaces[i].load();
             }
-
-            //WheelLeft.load();
-            //WheelRight.load();
-
-            //car.load();
-            //terrain.load();
-            //textFrame.load();
 
             CursorVisible = false;
 
@@ -362,54 +297,13 @@ namespace RoverVision
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-
-            //textFrame.load();
-
-
-            //textFrame = new TextFrame();
-
             var transform = Matrix4.Identity;
-            //var transform1 = transform;
-            //var transform2 = transform;
 
             //рендерим все Surface внутри Surfaces
             for (int i = 0; i < Surfaces.Count; i++)
             {
                 Surfaces[i].render(e, transform);
             }
-
-            float wheelscale = 0.1f;
-            //матрицы преобразования для колёс
-            //var Ltransform = Matrix4.CreateScale(wheelscale) * Matrix4.CreateTranslation(LWheelPosition);
-            //var Rtransform = Matrix4.CreateScale(wheelscale) * Matrix4.CreateTranslation(RWheelPosition);
-
-            //WheelLeft.render(e, Ltransform);
-            //WheelRight.render(e, Rtransform);
-
-            //carPosition.Y = terrain.returnHeightOnTriangle(new Vector2(carPosition.X, carPosition.Z));
-            //transform1 *= Matrix4.CreateTranslation(carPosition);
-            //transform1 *= Matrix4.CreateRotationZ(camera.return_pitch());
-            //textFramePosition = camera.returnFront();
-            //transform2 *= Matrix4.CreateTranslation(textFramePosition);
-            //transform2 *= Matrix4.CreateTranslation(camera.Position + camera.Front);
-            //transform2 *= Matrix4.CreateRotationZ(camera.return_pitch());
-            //transform2*= Matrix4.CreateRotationZ(camera.return_yaw());
-
-            //sw.Write(carPosition);
-            //var obstacle = false;
-
-            //sw.WriteLine(" "+obstacle);
-            //if(textFramePaint) textFrame.render(e, transform2);
-            //car.render(e, transform1);
-            //terrain.render(e, transform);
-            //if (textFramePaint) textFrame.render(e, Matrix4.CreateTranslation(camera.Position + camera.Front));
-            //Console.WriteLine(carPosition+"\x020"+camera.Position);
-            //Console.WriteLine(textFramePosition + "\x020" + camera.Position);
-            //Console.WriteLine(camera.Front + "\x020" + camera.returnFront());
-            //transform *= Matrix4.CreateTranslation(new Vector3(camera.Position.X-10,camera.Position.Y,camera.Position.Z-10));//положение окошка перед камерой
-            //if (framePaint) textFrame.render(e, transform);
-            //textFrame.render(e, transform);
-            //surface1.render(e,transform);
 
             SwapBuffers();
 
@@ -420,67 +314,14 @@ namespace RoverVision
         {
             var input = Keyboard.GetState();
 
-            if (input.IsKeyDown(Key.Escape))
-            {
-                Exit();
-            }
+            if (input.IsKeyDown(Key.Escape)) Exit();
 
             if (input.IsKeyDown(Key.F)) freeCamera = true;
             if (input.IsKeyDown(Key.G)) freeCamera = false;
 
-            //if(input.IsKeyDown(Key.F)) textFramePaint = true;
-
-            //if (input.IsKeyDown(Key.G)) textFramePaint = false;
-
-            //if(input.IsKeyDown(Key.F))
-            //{
-            //    framePaint = true;
-            //    //countKeyF++;
-            //    //textFrame.load();
-            //    //textFrame.render(e, Matrix4.Identity);
-            //    //SwapBuffers();
-            //}
-            //if (input.IsKeyDown(Key.G))
-            //{
-            //    framePaint=false;
-            //}
-
-
-
-            //Console.WriteLine(maxX);
-            //Console.WriteLine(maxY);
-
             const float cameraSpeed = 3f;
             const float sensitivity = 0.2f;
 
-            const float carSpeed = 300f;
-
-            //if (input.IsKeyDown(Key.Up))
-            //{
-            //    isForwardX = true;
-            //    //carPosition.X += carSpeed * (float)e.Time;
-            //}
-            //
-            //if (input.IsKeyDown(Key.Down))
-            //{
-            //    isForwardX = false;
-            //    //carPosition.X -= carSpeed * (float)e.Time;
-            //}
-            //
-            //if (input.IsKeyDown(Key.Right))
-            //{
-            //    isForwardY = true;
-            //    //carPosition.Z += carSpeed * (float)e.Time;
-            //}
-            //
-            //if (input.IsKeyDown(Key.Left))
-            //{
-            //    isForwardY = false;
-            //    //carPosition.Z -= carSpeed * (float)e.Time;
-            //}
-
-            //Vector3 front = camera.Front;
-            //front.Y = 0;
             if(freeCamera)
             {
                 if (input.IsKeyDown(Key.W))
@@ -521,6 +362,7 @@ namespace RoverVision
                 {
                     camera.Position -= new Vector3(1f, 0f, 0f) * cameraSpeed * (float)e.Time; // Backwards
                 }
+                //ограничиваем движение вне линии при привязанной камере
                 if (camera.Position.X < roverLine[0]) camera.Position =
                         new Vector3(roverLine[0], camera.Position.Y, camera.Position.Z);
                 if (camera.Position.X > roverLine[roverLine.Length - 3]) camera.Position =
@@ -561,7 +403,6 @@ namespace RoverVision
             {
                 Mouse.SetPosition(X + Width / 2f, Y + Height / 2f);
             }
-
             base.OnMouseMove(e);
         }
 
@@ -577,23 +418,14 @@ namespace RoverVision
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
             GL.UseProgram(0);
-            //terrain.destroy(e);
-            //textFrame.destroy(e);
-            //car.destroy(e);
-            //surface1.destroy(e);
 
             //удаляем все Surface внутри Surfaces
             for (int i = 0; i < Surfaces.Count; i++)
             {
                 Surfaces[i].destroy(e);
             }
-
-            //WheelLeft.destroy(e);
-            //WheelRight.destroy(e);
-
-            GL.DeleteBuffer(_vertexBufferObject);
+          
             base.OnUnload(e);
-            //sw.Close();
         }
     }
 }

@@ -21,16 +21,11 @@ namespace RoverVision
             this.surface = surface;
             this.objectColor = objectColor;
             this.drawType = drawType;
-            //_vertexBufferObject = _vBO;
-            //_vertexBufferObject = GL.GenBuffer();
-            surfaceShader = new Shader("./Shaders/shader2.vert", "./Shaders/shader2.frag");
+            surfaceShader = new Shader("./Shaders/shader.vert", "./Shaders/shader.frag");
         }
 
         public void load()
         {
-            //GL.Enable(EnableCap.DepthTest);
-            //GL.DepthFunc(DepthFunction.Less);
-            //GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
             surfaceShader.Use();
             GL.GenVertexArrays(1, out surfaceVAO);
             GL.BindVertexArray(surfaceVAO);
@@ -38,24 +33,21 @@ namespace RoverVision
             GL.BindBuffer(BufferTarget.ArrayBuffer, surfaceBufferObject);
             GL.BufferData(BufferTarget.ArrayBuffer, surface.Length * sizeof(float), surface, BufferUsageHint.StaticDraw);
 
-            //var vertexLocation = _frameshader.GetAttribLocation("aPosition");
             GL.EnableVertexAttribArray(0);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
         }
 
         public void render(FrameEventArgs e, Matrix4 model)
         {
-            //_frameshader.SetMatrix4("model", model);
-
             surfaceShader.Use();
 
             surfaceShader.SetMatrix4("view", Program.camera.GetViewMatrix());
             surfaceShader.SetMatrix4("projection", Program.camera.GetProjectionMatrix());
-            surfaceShader.SetVector3("objectColor", objectColor);//цвет окошка перед камерой
-            //_shader.SetVector3("objectColor", new Vector3(0.83f, 0.06f, 0.06f));
-
+            surfaceShader.SetVector3("objectColor", objectColor);//цвет того, что рисуем
             surfaceShader.SetMatrix4("model", model);
+
             GL.BindVertexArray(surfaceVAO);
+            //выбираем как будем рисовать
             if(drawType=="Line") GL.DrawArrays(PrimitiveType.Lines, 0, surface.Length);
             if(drawType=="Polygon") GL.DrawArrays(PrimitiveType.Polygon, 0, surface.Length);
         }
@@ -63,7 +55,6 @@ namespace RoverVision
         public void destroy(EventArgs e)
         {
             GL.DeleteProgram(surfaceShader.Handle);
-            //GL.DeleteBuffer(_vertexBufferObject);
         }
 
     }
