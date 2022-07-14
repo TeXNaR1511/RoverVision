@@ -20,9 +20,12 @@ namespace RoverVision
         private int _vertexBufferObject;
         private bool _firstMove = true;
         private Vector2 _lastPos;
-        private bool textFramePaint = false;
-        private Vector3 carPosition = new Vector3(0, 0, 0);
-        private Vector3 textFramePosition = new Vector3(0, 0, 0);
+        //private bool textFramePaint = false;
+        //private Vector3 carPosition = new Vector3(0, 0, 0);
+        //private Vector3 textFramePosition = new Vector3(0, 0, 0);
+
+        //private Vector3 LWheelPosition = new Vector3(0, 0, 1);
+        //private Vector3 RWheelPosition = new Vector3(0, 0, 3);
         //private int countKeyF = 0;
         //здесь задаём все линии
         //private static float[] line1 = new float[]
@@ -43,9 +46,9 @@ namespace RoverVision
         //private List<float[]> Lines = new List<float[]>() { line1, line2 };
         //список со всеми линиями - экземплярами класса Surface
         private List<Surface> Surfaces;
-        private Surface WheelLeft;
-        private Surface WheelRight;
-        private float[] circle;
+        //private Surface WheelLeft;
+        //private Surface WheelRight;
+        //private float[] circle;
 
         private bool isForwardX = false;
         private bool isForwardY = false;
@@ -280,21 +283,26 @@ namespace RoverVision
             };
             //задаём окружность
             //circle = new float[] {};
-            List<float> cir = new List<float>();
-            for (double i = 0; i < 2 * Math.PI; i += 0.2d)
-            {
-                //circle.Append((float)Math.Cos(i));
-                //circle.Append((float)Math.Sin(i));
-                cir.Add((float)Math.Cos(i));
-                cir.Add((float)Math.Sin(i));
-                cir.Add(0f);
-            }
-            circle = cir.ToArray();
-
-            WheelLeft = new Surface(
-                circle,
-                new Vector3(1f, 1f, 1f),
-                "Line");
+            //List<float> cir = new List<float>();
+            //for (double i = 0; i < 2 * Math.PI; i += 0.2d)
+            //{
+            //    //circle.Append((float)Math.Cos(i));
+            //    //circle.Append((float)Math.Sin(i));
+            //    cir.Add((float)Math.Cos(i));
+            //    cir.Add((float)Math.Sin(i));
+            //    cir.Add(0f);
+            //}
+            //circle = cir.ToArray();
+            //
+            //WheelLeft = new Surface(
+            //    circle,
+            //    new Vector3(1f, 1f, 1f),
+            //    "Polygon");
+            //
+            //WheelRight = new Surface(
+            //    circle,
+            //    new Vector3(1f, 1f, 1f),
+            //    "Polygon");
 
 
             //загружаем все Surface внутри Surfaces
@@ -303,7 +311,8 @@ namespace RoverVision
                 Surfaces[i].load();
             }
 
-            WheelLeft.load();
+            //WheelLeft.load();
+            //WheelRight.load();
 
             //car.load();
             //terrain.load();
@@ -325,8 +334,8 @@ namespace RoverVision
             //textFrame = new TextFrame();
 
             var transform = Matrix4.Identity;
-            var transform1 = transform;
-            var transform2 = transform;
+            //var transform1 = transform;
+            //var transform2 = transform;
 
             //рендерим все Surface внутри Surfaces
             for (int i = 0; i < Surfaces.Count; i++)
@@ -334,7 +343,13 @@ namespace RoverVision
                 Surfaces[i].render(e, transform);
             }
 
-            WheelLeft.render(e, transform);
+            float wheelscale = 0.1f;
+            //матрицы преобразования для колёс
+            //var Ltransform = Matrix4.CreateScale(wheelscale) * Matrix4.CreateTranslation(LWheelPosition);
+            //var Rtransform = Matrix4.CreateScale(wheelscale) * Matrix4.CreateTranslation(RWheelPosition);
+
+            //WheelLeft.render(e, Ltransform);
+            //WheelRight.render(e, Rtransform);
 
             //carPosition.Y = terrain.returnHeightOnTriangle(new Vector2(carPosition.X, carPosition.Z));
             //transform1 *= Matrix4.CreateTranslation(carPosition);
@@ -510,7 +525,8 @@ namespace RoverVision
                 Surfaces[i].destroy(e);
             }
 
-            WheelLeft.destroy(e);
+            //WheelLeft.destroy(e);
+            //WheelRight.destroy(e);
 
             GL.DeleteBuffer(_vertexBufferObject);
             base.OnUnload(e);

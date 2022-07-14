@@ -94,7 +94,7 @@ namespace RoverVision
         public Matrix4 GetProjectionMatrix()
         {
             //return Matrix4.CreateOrthographicOffCenter(_fo)
-            return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.1f, 100000f);/*последний параметр дальность зрения*/
+            return Matrix4.CreatePerspectiveFieldOfView(_fov, AspectRatio, 0.01f, 100000f);/*последний параметр дальность зрения*/
         }
 
         public Matrix4 GetOrthoProjectionMatrix()
