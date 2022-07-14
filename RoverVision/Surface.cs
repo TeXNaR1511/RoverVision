@@ -34,10 +34,13 @@ namespace RoverVision
 
         private Vector3 objectColor = new Vector3();
 
-        public Surface(float[] surface, Vector3 objectColor)
+        private String drawType;
+
+        public Surface(float[] surface, Vector3 objectColor, String drawType)
         {
             this.surface = surface;
             this.objectColor = objectColor;
+            this.drawType = drawType;
             //_vertexBufferObject = _vBO;
             //_vertexBufferObject = GL.GenBuffer();
             surfaceShader = new Shader("./Shaders/shader2.vert", "./Shaders/shader2.frag");
@@ -73,7 +76,8 @@ namespace RoverVision
 
             surfaceShader.SetMatrix4("model", model);
             GL.BindVertexArray(surfaceVAO);
-            GL.DrawArrays(PrimitiveType.Lines, 0, surface.Length);
+            if(drawType=="Line") GL.DrawArrays(PrimitiveType.Lines, 0, surface.Length);
+            if(drawType=="Polygon") GL.DrawArrays(PrimitiveType.Polygon, 0, surface.Length);
         }
 
         public void destroy(EventArgs e)

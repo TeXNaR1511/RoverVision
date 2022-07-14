@@ -43,6 +43,9 @@ namespace RoverVision
         //private List<float[]> Lines = new List<float[]>() { line1, line2 };
         //список со всеми линиями - экземплярами класса Surface
         private List<Surface> Surfaces;
+        private Surface WheelLeft;
+        private Surface WheelRight;
+        private float[] circle;
 
         private bool isForwardX = false;
         private bool isForwardY = false;
@@ -128,7 +131,8 @@ namespace RoverVision
                         9.2f,1.3f,0f,
                         10.1f,2.1f,0f,
                     },
-                    new Vector3(1f, 0.980f, 0.058f)),
+                    new Vector3(1f, 0.980f, 0.058f),
+                    "Line"),
                 //вторая линия
                 new Surface(
                     new float[]
@@ -163,7 +167,8 @@ namespace RoverVision
                         9.4f,0.9f,1f,
                         10f,1.5f,1f,
                     },
-                    new Vector3(0.058f, 0.203f, 1f)),
+                    new Vector3(0.058f, 0.203f, 1f),
+                    "Line"),
                 //третья линия
                 new Surface(
                     new float[]
@@ -198,7 +203,8 @@ namespace RoverVision
                         9f,2.3f,2f,
                         10f,2.1f,2f,
                     },
-                    new Vector3(1f, 0.211f, 0.058f)),
+                    new Vector3(1f, 0.211f, 0.058f),
+                    "Line"),
                 //четвертая линия
                 new Surface(
                     new float[]
@@ -233,7 +239,8 @@ namespace RoverVision
                         8.8f,1.4f,3f,
                         10f,2.1f,3f,
                     },
-                    new Vector3(0.066f, 1f, 0.058f)),
+                    new Vector3(0.066f, 1f, 0.058f),
+                    "Line"),
                 //пятая линия
                 new Surface(
                     new float[]
@@ -268,14 +275,35 @@ namespace RoverVision
                         8.8f,2.4f,4f,
                         10f,1.5f,4f,
                     },
-                    new Vector3(1f, 0.058f, 0.984f)),
+                    new Vector3(1f, 0.058f, 0.984f),
+                    "Line"),
             };
+            //задаём окружность
+            //circle = new float[] {};
+            List<float> cir = new List<float>();
+            for (double i = 0; i < 2 * Math.PI; i += 0.2d)
+            {
+                //circle.Append((float)Math.Cos(i));
+                //circle.Append((float)Math.Sin(i));
+                cir.Add((float)Math.Cos(i));
+                cir.Add((float)Math.Sin(i));
+                cir.Add(0f);
+            }
+            circle = cir.ToArray();
+
+            WheelLeft = new Surface(
+                circle,
+                new Vector3(1f, 1f, 1f),
+                "Line");
+
 
             //загружаем все Surface внутри Surfaces
             for (int i=0;i<Surfaces.Count;i++)
             {
                 Surfaces[i].load();
             }
+
+            WheelLeft.load();
 
             //car.load();
             //terrain.load();
@@ -305,6 +333,8 @@ namespace RoverVision
             {
                 Surfaces[i].render(e, transform);
             }
+
+            WheelLeft.render(e, transform);
 
             //carPosition.Y = terrain.returnHeightOnTriangle(new Vector2(carPosition.X, carPosition.Z));
             //transform1 *= Matrix4.CreateTranslation(carPosition);
@@ -479,6 +509,8 @@ namespace RoverVision
             {
                 Surfaces[i].destroy(e);
             }
+
+            WheelLeft.destroy(e);
 
             GL.DeleteBuffer(_vertexBufferObject);
             base.OnUnload(e);
