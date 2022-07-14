@@ -321,7 +321,7 @@ namespace RoverVision
 
             const float cameraSpeed = 3f;
             const float sensitivity = 0.2f;
-
+            //движение при свободной камере
             if(freeCamera)
             {
                 if (input.IsKeyDown(Key.W))
@@ -349,7 +349,7 @@ namespace RoverVision
                     camera.Position -= camera.Up * cameraSpeed * (float)e.Time; // Down
                 }
             }
-            
+            //движение при привязанной камере
             if(!freeCamera)
             {
                 camera.Position =
