@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
-using OpenTK;
+﻿using OpenTK;
 
 namespace RoverVision
 {
@@ -129,6 +123,21 @@ namespace RoverVision
         public float return_yaw()
         {
             return _yaw;
+        }
+
+        public float Ynofreecamera(float[] line, float x)
+        {
+            int iter = 0;
+            for(int i=0;i<line.Length;i+=6)
+            {
+                if (line[i]<=x && x <= line[i+3])
+                {
+                    iter = i;
+                    break;
+                }
+            }
+            return ((line[iter + 1] - line[iter + 4]) * x + 
+                line[iter] * line[iter+4] - line[iter+3] * line[iter + 1]) / (line[iter] - line[iter+3]);
         }
 
     }

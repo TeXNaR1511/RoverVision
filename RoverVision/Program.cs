@@ -16,6 +16,7 @@ namespace RoverVision
     {
 
         public static Camera camera;
+        private bool freeCamera = true;
 
         private int _vertexBufferObject;
         private bool _firstMove = true;
@@ -49,6 +50,8 @@ namespace RoverVision
         //private Surface WheelLeft;
         //private Surface WheelRight;
         //private float[] circle;
+
+        private float[] roverLine;
 
         private bool isForwardX = false;
         private bool isForwardY = false;
@@ -88,7 +91,6 @@ namespace RoverVision
             //GL.ClearColor(0.101f, 0.98f, 1.0f, 1.0f);
             GL.ClearColor(0.219f, 0.333f, 0.360f, 1.0f);
 
-           
 
             //GL.ClearColor(0f, 0f, 1f,1f);
             //GL.Enable(EnableCap.DepthTest);
@@ -96,6 +98,39 @@ namespace RoverVision
             camera = new Camera(new Vector3(0, 2/*terrain.getHeightAtPosition(256, 256)*/, 0), Width / (float)Height);//положение камеры начальное
             //textFrame = new TextFrame();
             //car = new Car();
+
+            roverLine = new float[]
+                    {
+                        0f,0.7f,2f,
+                        0.7f,0.3f,2f,
+
+                        0.7f,0.3f,2f,
+                        2.2f,1f,2f,
+
+                        2.2f,1f,2f,
+                        3.3f,0.2f,2f,
+
+                        3.3f,0.2f,2f,
+                        4f,2.5f,2f,
+
+                        4f,2.5f,2f,
+                        5.7f,2.7f,2f,
+
+                        5.7f,2.7f,2f,
+                        6.3f,2.9f,2f,
+
+                        6.3f,2.9f,2f,
+                        7.2f,3.3f,2f,
+
+                        7.2f,3.3f,2f,
+                        8.4f,2.5f,2f,
+
+                        8.4f,2.5f,2f,
+                        9f,2.3f,2f,
+
+                        9f,2.3f,2f,
+                        10f,2.1f,2f,
+                    };
             //задаём Surfaces
             Surfaces = new List<Surface>()
             {
@@ -390,6 +425,9 @@ namespace RoverVision
                 Exit();
             }
 
+            if (input.IsKeyDown(Key.F)) freeCamera = true;
+            if (input.IsKeyDown(Key.G)) freeCamera = false;
+
             //if(input.IsKeyDown(Key.F)) textFramePaint = true;
 
             //if (input.IsKeyDown(Key.G)) textFramePaint = false;
@@ -407,7 +445,7 @@ namespace RoverVision
             //    framePaint=false;
             //}
 
-  
+
 
             //Console.WriteLine(maxX);
             //Console.WriteLine(maxY);
@@ -443,30 +481,50 @@ namespace RoverVision
 
             //Vector3 front = camera.Front;
             //front.Y = 0;
-            if (input.IsKeyDown(Key.W))
+            if(freeCamera)
             {
-                camera.Position += camera.Front * cameraSpeed * (float)e.Time; // Forward
+                if (input.IsKeyDown(Key.W))
+                {
+                    camera.Position += camera.Front * cameraSpeed * (float)e.Time; // Forward
+                }
+                if (input.IsKeyDown(Key.S))
+                {
+                    camera.Position -= camera.Front * cameraSpeed * (float)e.Time; // Backwards
+                }
+                if (input.IsKeyDown(Key.A))
+                {
+                    camera.Position -= camera.Right * cameraSpeed * (float)e.Time; // Left
+                }
+                if (input.IsKeyDown(Key.D))
+                {
+                    camera.Position += camera.Right * cameraSpeed * (float)e.Time; // Right
+                }
+                if (input.IsKeyDown(Key.Space))
+                {
+                    camera.Position += camera.Up * cameraSpeed * (float)e.Time; // Up
+                }
+                if (input.IsKeyDown(Key.LShift))
+                {
+                    camera.Position -= camera.Up * cameraSpeed * (float)e.Time; // Down
+                }
             }
-
-            if (input.IsKeyDown(Key.S))
+            
+            if(!freeCamera)
             {
-                camera.Position -= camera.Front * cameraSpeed * (float)e.Time; // Backwards
-            }
-            if (input.IsKeyDown(Key.A))
-            {
-                camera.Position -= camera.Right * cameraSpeed * (float)e.Time; // Left
-            }
-            if (input.IsKeyDown(Key.D))
-            {
-                camera.Position += camera.Right * cameraSpeed * (float)e.Time; // Right
-            }
-            if (input.IsKeyDown(Key.Space))
-            {
-                camera.Position += camera.Up * cameraSpeed * (float)e.Time; // Up
-            }
-            if (input.IsKeyDown(Key.LShift))
-            {
-                camera.Position -= camera.Up * cameraSpeed * (float)e.Time; // Down
+                camera.Position =
+                    new Vector3(camera.Position.X, camera.Ynofreecamera(roverLine, camera.Position.X) + 1f, 2f);
+                if (input.IsKeyDown(Key.W))
+                {
+                    camera.Position += new Vector3(1f, 0f, 0f) * cameraSpeed * (float)e.Time; // Forward
+                }
+                if (input.IsKeyDown(Key.S))
+                {
+                    camera.Position -= new Vector3(1f, 0f, 0f) * cameraSpeed * (float)e.Time; // Backwards
+                }
+                if (camera.Position.X < roverLine[0]) camera.Position =
+                        new Vector3(roverLine[0], camera.Position.Y, camera.Position.Z);
+                if (camera.Position.X > roverLine[roverLine.Length - 3]) camera.Position =
+                        new Vector3(roverLine[roverLine.Length - 3], camera.Position.Y, camera.Position.Z);
             }
 
 
@@ -487,6 +545,11 @@ namespace RoverVision
 
                 camera.Yaw += deltaX * sensitivity;
                 camera.Pitch -= deltaY * sensitivity;
+                //здесь ограничиваем угол обзора(тангажа и рыскания) у несвободной камеры в 2*20 градусов 
+                if (!freeCamera && camera.Yaw < -20) camera.Yaw = -20;
+                if (!freeCamera && camera.Yaw > 20) camera.Yaw = 20;
+                if (!freeCamera && camera.Pitch < -20) camera.Pitch = -20;
+                if (!freeCamera && camera.Pitch > 20) camera.Pitch = 20;
             }
 
             base.OnUpdateFrame(e);
